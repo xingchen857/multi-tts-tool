@@ -3,12 +3,16 @@ services:
     name: multi-tts-backend
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:10000
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
       - key: PORT
         value: 10000
+      - key: PYTHONUNBUFFERED
+        value: "true"
+    healthCheckPath: /api/voices
+    autoDeploy: true
 
   - type: web
     name: multi-tts-frontend
